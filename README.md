@@ -27,4 +27,6 @@ To build and test the ASR:
 
 ### Prerequisites:
 
-From a shell prompt, the commands `wget` and `flac` should work.  On Ubuntu, you might need to `sudo apt-get install flac`.
+From a shell prompt, the commands `wget`, `gawk` and `flac` should work.  On Ubuntu, you might need to `sudo apt-get install flac`.
+
+Install SRILM.  Follow the instructions at `http://www.speech.sri.com/projects/srilm/download.html`, get the file `srilm.tgz`, and then (from `s5`) run `../../../tools/install_srilm.sh`.
