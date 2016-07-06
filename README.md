@@ -9,8 +9,8 @@ Usage:
 git clone https://www.github.com/kaldi-asr/kaldi
 cd kaldi/egs
 git clone https://www.github.com/uiuc-sst/pseudo-swahili
-cd pseudo-swahili
-ln -s ../wsj/s5/steps steps
-ln -s ../wsj/s5/utils utils
+cd pseudo-swahili/s5
+ln -s ../../wsj/s5/steps steps
+ln -s ../../wsj/s5/utils utils
 ./run.sh
 ```
