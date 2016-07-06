@@ -24,3 +24,7 @@ To build and test the ASR:
 ```
 ./run.sh
 ```
+
+### Prerequisites:
+
+From a shell prompt, the commands `wget` and `flac` should work.  On Ubuntu, you might need to `sudo apt-get install flac`.
