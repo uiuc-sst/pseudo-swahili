@@ -36,7 +36,7 @@ lm_order=2
 # Camille tried "false", but that crashes downstream.
 pos_dep_phones=true
 
-# DATA_ROOT="/zx/trash/voxforge" is from ./path.sh.
+# DATA_ROOT="/tmp/voxforge" is from ./path.sh.
 
 # The directory below will be used to link to a subset of the user directories
 # based on various criteria(currently just speaker's accent)
@@ -52,22 +52,22 @@ pseudo=/r/lorelei/pseudo-swahili
 #if false; then # fi	;;;;
 #fi  # if false; then	;;;;
 
-# Make ${selected} == /zx/trash/voxforge/selected,
+# Make ${selected} == /tmp/voxforge/selected,
 # containing symlinks to utterances, e.g.
-# /zx/trash/voxforge/extracted/ariyan-20120801-gra/ , containing wav/*.wav and
+# /tmp/voxforge/extracted/ariyan-20120801-gra/ , containing wav/*.wav and
 # transcript etc/PROMPTS, lines like: ariyan-20120801-gra/mfc/b0269 WHY NOT LIKE ANY RAILROAD STATION OR FERRY DEPOT
 # transcript etc/prompts-original: b0269 Why not like any railroad station or ferry depot.
 local/voxforge_select.sh --dialect $dialects \
   ${DATA_ROOT}/extracted ${selected} || exit 1
 
-# Map anonymous speakers, /zx/trash/voxforge/selected/anonymous-yyyymmdd-abc, to unique IDs.
-# Make data/local/anon.map, lines like: anonymous0042 /zx/trash/voxforge/selected/anonymous-20080425-atw
+# Map anonymous speakers, /tmp/voxforge/selected/anonymous-yyyymmdd-abc, to unique IDs.
+# Make data/local/anon.map, lines like: anonymous0042 /tmp/voxforge/selected/anonymous-20080425-atw
 local/voxforge_map_anonymous.sh ${selected} || exit 1
 
 # Make:
 # data/local
 # data/local/tmp 
-# data/local/tmp/speakers_all.txt from /zx/trash/voxforge/selected, a list of utterers.
+# data/local/tmp/speakers_all.txt from /tmp/voxforge/selected, a list of utterers.
 #	(But pseudo has no utterers.  Each utterance gets its own utterance-id.)
 # data/local/tmp/speakers_test.txt (shuffle ...all.txt | head -$nspk_test)
 # data/local/tmp/speakers_train.txt (the set difference)
@@ -76,7 +76,7 @@ local/voxforge_map_anonymous.sh ${selected} || exit 1
 # data/local/tmp/dir_train.txt has 4013 lines
 #
 # data/local/tmp/{test,train}{_wav.scp,_trans.txt,.utt2spk}.unsorted
-#   test_wav.scp.unsorted has 274 lines: foo-jxh-a0077 /zx/trash/voxforge/selected/foo-jxh/wav/a0077.wav
+#   test_wav.scp.unsorted has 274 lines: foo-jxh-a0077 /tmp/voxforge/selected/foo-jxh/wav/a0077.wav
 #   test.utt2spk.unsorted has 274 lines: test-20100811-jxh-a0077 test
 #   test_trans.txt.unsorted has 274    : test-20100811-jxh-a0077 IT IS THE FIRE PARTLY SHE SAID
 # Skip audio lacking a transcript, and then sort, to make
@@ -112,16 +112,12 @@ utils/prepare_lang.sh --position-dependent-phones $pos_dep_phones \
 # Prepare G.fst and data/{train,test} directories.  Actually, just data/train.
 local/voxforge_format_data.sh || exit 1
 
-# >>>>>>>>>>>>>>>>>>>>>>>>
-# Compare the previous stanzas to the kaldi tutorial.  Make my own files in this format, from scratch, from /r/lorelei/pseudo-swahili.
-#
 # local/voxforge_format_data.sh uses these files, data/local/tmp/{test,train}{_wav.scp,_trans.txt,.utt2spk},
 # and copies them to data/{train,test}.
 #
-# Well, start by collecting wav's and transcriptions.
-# From  ifp-53: ~/kaldi-trunk/egs/swahili/s5/asr_swahili/data/test126.
-wavz=/zx/trash/pseudo-swahili/test126/wav5/a
-trannz=/zx/trash/pseudo-swahili/test126/transcriptions-raw
+# Collect wav's and transcriptions from ifp-53: ~/kaldi-trunk/egs/swahili/s5/asr_swahili/data/test126.
+wavz=/tmp/pseudo-swahili/test126/wav5/a
+trannz=/tmp/pseudo-swahili/test126/transcriptions-raw
 echo "Normalizing test data from BABEL."
 for f in $wavz/*.wav; do echo `basename "${f%.wav}"` "$f"; done | sort > data/test/wav.scp
 for f in $trannz/*.txt; do basename "${f%.txt}"; done > /tmp/text-uttIDs
