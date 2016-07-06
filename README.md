@@ -15,7 +15,7 @@ ln -s ../../wsj/s5/steps steps
 ln -s ../../wsj/s5/utils utils
 ```
 
-To install the Voxforge data:
+To install the Voxforge data (this takes 45 minutes, and eats 25 GB of disk space):
 ```
 ./getdata.sh
 ```
