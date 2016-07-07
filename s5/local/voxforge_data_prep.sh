@@ -18,12 +18,12 @@ nspk_test=30
 . utils/parse_options.sh
 
 if [ $# != 1 ]; then
-  echo "Usage: $0 <data-directory>";
-  exit 1;
+  echo "Usage: $0 <data-directory>"
+  exit 1
 fi
 
 command -v flac >/dev/null 2>&1 ||\
- { echo "FLAC decompressor needed but not found"'!' ; exit 1; }
+ { echo "voxforge_data_prep.sh: no FLAC decompressor installed.  Try: apt-get install flac." ; exit 1; }
 
 DATA=$1
 
