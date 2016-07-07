@@ -86,9 +86,9 @@ local/voxforge_map_anonymous.sh ${selected} || exit 1
 # (but why not instead utils/utt2spk_to_spk2utt.pl?)
 local/voxforge_data_prep.sh --nspk_test ${nspk_test} ${selected} || exit 1
 
-# Prepare ARPA LM and vocabulary using SRILM
+# Prepare ARPA LM and vocabulary using SRILM.
 # Reads data/local/tmp/corpus.txt, 18k lines of (uppercase) prose.
-# INSTEAD of corpus.txt, /r/lorelei/pseudo-swahili/a.sh makes lm.arpa from raw.txt, raw-placenames.txt.
+# INSTEAD of corpus.txt, pseudo/a.sh makes lm.arpa from raw.txt, raw-placenames.txt.
 # So this next line is probably redundant.
 local/voxforge_prepare_lm.sh --order ${lm_order} || exit 1
 # Inject.
@@ -111,14 +111,45 @@ utils/prepare_lang.sh --position-dependent-phones $pos_dep_phones \
 
 # Prepare G.fst and data/{train,test} directories.  Actually, just data/train.
 local/voxforge_format_data.sh || exit 1
-
-# local/voxforge_format_data.sh uses these files, data/local/tmp/{test,train}{_wav.scp,_trans.txt,.utt2spk},
+# local/voxforge_format_data.sh uses data/local/tmp/{test,train}{_wav.scp,_trans.txt,.utt2spk},
 # and copies them to data/{train,test}.
-#
-# Collect wav's and transcriptions from ifp-53: ~/kaldi-trunk/egs/swahili/s5/asr_swahili/data/test126.
-wavz=/tmp/pseudo-swahili/test126/wav5/a
-trannz=/tmp/pseudo-swahili/test126/transcriptions-raw
+
+# Download BABEL wav's and transcriptions.
+# ifp-serv-03.ifp.illinois.edu://workspace/speech_web/mc/pseudo-swahili.tgz
+BABEL_URL=http://isle.illinois.edu/mc/pseudo-swahili.tgz
+BABEL_DIR=test126
+
+if [[ ! -d $BABEL_DIR ]]; then
+  tarball=`basename $BABEL_URL` # data.tgz
+  if [ -f $tarball ]; then
+    echo "Found tarball $tarball, previously downloaded from $BABEL_URL."
+  else
+    echo "Downloading $BABEL_URL."
+    wget --no-verbose $BABEL_URL || exit 1
+  fi
+  # Check the name of the tarball's first file (probably a directory).  Strip the trailing slash.
+  tarDir=`tar tvfz $tarball | head -1 | awk '{print $NF}' | sed -e 's_\/$__'`
+  if [[ "$tarDir" == "" ]]; then
+    echo "Tarball $tarball is corrupt or empty."; exit 1
+  fi
+  if [[ "$tarDir" != "test126/wav5/a" ]]; then
+    echo "Tarball $tarball contains unexpected files."; exit 1
+  fi
+  echo "Extracting $tarball, hopefully into \$BABEL_DIR $BABEL_DIR."
+  tar xzf $tarball || ( echo "Unexpected contents in $tarball.  Aborting."; exit 1 )
+  if [[ ! -d $BABEL_DIR ]]; then
+    echo "Still missing BABEL_DIR directory $BABEL_DIR. Check $BABEL_URL and $1."; exit 1
+  fi
+  echo "Installed \$BABEL_DIR $BABEL_DIR."
+fi
+if [[ ! -d $BABEL_DIR ]]; then
+  echo "Still missing BABEL_DIR directory $BABEL_DIR. Check $BABEL_URL and $1."; exit 1
+fi
+
+wavz=$BABEL_DIR/wav5/a
+trannz=$BABEL_DIR/transcriptions-raw
 echo "Normalizing test data from BABEL."
+mkdir -p data/test
 for f in $wavz/*.wav; do echo `basename "${f%.wav}"` "$f"; done | sort > data/test/wav.scp
 for f in $trannz/*.txt; do basename "${f%.txt}"; done > /tmp/text-uttIDs
 for f in $trannz/*.txt; do grep sta "$f" | sed 's/.sta. //';  done > /tmp/text-transcriptions
