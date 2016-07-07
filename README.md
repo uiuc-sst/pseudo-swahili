@@ -23,7 +23,7 @@ To add this to Kaldi, `cd kaldi/tools; extras/install_sequitur.sh`.
 
 ### Usage
 
-To add these pseudo-Swahili scripts to Kaldi:
+Add these pseudo-Swahili scripts to Kaldi.
 ```
 cd kaldi/egs
 git clone https://www.github.com/uiuc-sst/pseudo-swahili
@@ -32,12 +32,18 @@ ln -s ../../wsj/s5/steps steps
 ln -s ../../wsj/s5/utils utils
 ```
 
-To install the Voxforge data (this takes 45 minutes, and eats 25 GB of disk space):
+Get the Voxforge corpus (this takes 45 minutes, and uses 25 GB of disk space).
 ```
 ./getdata.sh
 ```
 
-To build and test the speech recognizer:
+Build the low-resource language model, vocabulary, etc.
+```
+cd pseudo-swahili/pseudo
+./a.sh
+```
+
+Build and test the speech recognizer.
 ```
 ./run.sh
 ```
