@@ -42,7 +42,7 @@ pos_dep_phones=true
 # based on various criteria(currently just speaker's accent)
 selected=${DATA_ROOT}/selected
 
-pseudo=/r/lorelei/pseudo-swahili
+pseudo=../pseudo
 
 # The user of this script could change some of the above parameters. Example:
 # /bin/bash run.sh --pos-dep-phones false
