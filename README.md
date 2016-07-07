@@ -45,6 +45,7 @@ cd pseudo-swahili/pseudo
 
 Build and test the speech recognizer.
 ```
+cd pseudo-swahili/s5
 ./run.sh
 ```
 
