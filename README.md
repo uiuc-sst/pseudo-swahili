@@ -1,4 +1,4 @@
-# Pseudo-Swahili recipe for Kaldi ASR
+# Pseudo-Swahili ASR for Kaldi
 
 Uses almost no Swahili resources.
 Audio FSTs are trained from Voxforge's English.
@@ -32,12 +32,12 @@ ln -s ../../wsj/s5/steps steps
 ln -s ../../wsj/s5/utils utils
 ```
 
-Get the Voxforge corpus (this takes 45 minutes, and uses 25 GB of disk space).
+Get the Voxforge corpus of spoken English (this takes 45 minutes, and uses 25 GB of disk space).
 ```
 ./getdata.sh
 ```
 
-Build the low-resource language model, vocabulary, etc.
+Build the low-resource language model, vocabulary, etc. for Swahili.
 ```
 cd pseudo-swahili/pseudo
 ./a.sh
