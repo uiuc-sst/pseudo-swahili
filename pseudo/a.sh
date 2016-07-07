@@ -22,25 +22,26 @@ echo "<eps> !SIL" `cat swahili-words.txt` "#0 <s> </s>" | tr \  '\n' | awk '{pri
 ./make-pronundict.rb | (export LC_ALL=C; sort -u > lexicon.txt)
 echo -e '!SIL\tSIL' >> lexicon.txt
 
-# From /r/lorelei/kaldi/egs/camille/s5/local/prepare_lm.sh
-. /r/lorelei/kaldi/egs/camille/s5/path.sh || die "path.sh expected"
-. /r/lorelei/kaldi/tools/env.sh || die "tools/env.sh expected for SRILM"
-# export SRILM=/r/lorelei/kaldi/tools/srilm
-# export PATH=${PATH}:${SRILM}/bin:${SRILM}/bin/i686-m64
+# From s5/local/prepare_lm.sh
+. ../s5/path.sh || exit 1
+. ../../../tools/env.sh || exit 1   # SRILM expects tools/env.sh
 export LC_ALL=C # needed?
-# /r/lorelei/kaldi/tools/srilm/bin/i686-m64/ngram-count
+PATH=$PATH:../../../tools/srilm/bin/i686-m64 # for ngram-count, etc.
 # -unk -map-unk "<UNK>"
 ngram-count -text swahili-phrases.txt -order 3 -lm pseudo-swahili.arpa
 	# Tell ngram-count about eps or SIL to avoid this:?
 	#   warning: discount coeff 1 is out of range: 0
-/r/lorelei/kaldi/egs/camille/s5/utils/find_arpa_oovs.pl data-lang-words.txt < pseudo-swahili.arpa | sort > oovs.txt
+../s5/utils/find_arpa_oovs.pl data-lang-words.txt < pseudo-swahili.arpa | sort > oovs.txt
 cat pseudo-swahili.arpa |
     grep -v '<s> <s>' |
     grep -v '</s> <s>' |
     grep -v '</s> </s>' |
-    /r/lorelei/kaldi/src/bin/arpa2fst - | fstprint |
-    /r/lorelei/kaldi/egs/camille/s5/utils/remove_oovs.pl oovs.txt |
-    /r/lorelei/kaldi/egs/camille/s5/utils/eps2disambig.pl |
-    /r/lorelei/kaldi/egs/camille/s5/utils/s2eps.pl |
+    ../../../src/lmbin/arpa2fst - | fstprint |
+    ../s5/utils/remove_oovs.pl oovs.txt |
+    ../s5/utils/eps2disambig.pl |
+    ../s5/utils/s2eps.pl |
     fstcompile --isymbols=data-lang-words.txt --osymbols=data-lang-words.txt --keep_isymbols=false --keep_osymbols=false |
     fstrmepsilon | fstarcsort --sort_type=ilabel > lang-slash-G.fst
+
+# ../../../src/lmbin/arpa2fst might instead be ../../../src/bin/arpa2fst.
+# Find the first instance of ../../../src/*bin/arpa2fst ?
