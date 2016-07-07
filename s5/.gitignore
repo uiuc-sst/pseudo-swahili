@@ -2,3 +2,5 @@ data
 exp
 steps
 utils
+conf/g2p_model
+env.sh
