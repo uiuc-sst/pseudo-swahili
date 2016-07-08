@@ -106,6 +106,7 @@ cp $pseudo/lexicon.txt data/local/dict/lexicon.txt
 sed 's/[^\t]*\t//' data/local/dict/lexicon.txt | sed 's/ /\n/g' | sort -u | sed '/^$/d' | grep -v SIL > data/local/dict/nonsilence_phones.txt
 
 # Prepare data/lang and data/local/lang directories
+rm -f data/local/dict/lexiconp.txt # In case there's an English one, let prepare_lang.sh make a Swahili one.
 utils/prepare_lang.sh --position-dependent-phones $pos_dep_phones \
   data/local/dict '!SIL' data/local/lang data/lang || exit 1
 
