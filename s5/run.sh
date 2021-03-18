@@ -116,8 +116,9 @@ local/voxforge_format_data.sh || exit 1
 # and copies them to data/{train,test}.
 
 # Download BABEL wav's and transcriptions.
-# ifp-serv-03.ifp.illinois.edu://workspace/speech_web/mc/pseudo-swahili.tgz
-BABEL_URL=http://isle.illinois.edu/mc/pseudo-swahili.tgz
+# 2016: ifp-serv-03.ifp.illinois.edu://workspace/speech_web/mc/pseudo-swahili.tgz
+# 2016: BABEL_URL=http://isle.illinois.edu/mc/pseudo-swahili.tgz
+BABEL_URL=http://www.isle.illinois.edu/speech_web_lg/software/mc/pseudo-swahili.tgz # 2021, temporary
 BABEL_DIR=test126
 
 if [[ ! -d $BABEL_DIR ]]; then
