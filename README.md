@@ -19,7 +19,8 @@ To add this to Kaldi, [download](http://www.speech.sri.com/projects/srilm/downlo
 
 - The [Sequitur](https://www-i6.informatik.rwth-aachen.de/web/Software/g2p.html) grapheme-to-phoneme converter.
 
-To add this to Kaldi, `cd kaldi/tools && extras/install_sequitur.sh`.
+To add this to Kaldi, `cd kaldi/tools && extras/install_sequitur.sh`.  
+(You might first need to `sudo pip install numpy` (for Python 2.7)).
 
 ### Usage
 
